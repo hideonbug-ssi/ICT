@@ -1,62 +1,24 @@
-// src/index.js
-const { Pool } = require('pg'); // Import PostgreSQL client
-require('dotenv').config(); // Load environment variables
-const express = require('express');
-const http = require('http');
-const WebSocket = require('ws');
+// index.js
 
-const app = express();
-const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
+const express = require('express'); // Import the Express module
+const { app, wss, register, server } = require('../common/express.js'); // Assuming express.js exports your Express app and WebSocket server
+const { connectDB } = require('../common/postgres.js'); // Import the connect function to connect to PostgreSQL
+const test = require('../endpoint/test'); // Import your test routes
+const { ShowScoreHandler } = require('../endpoint/show_score.js');
 
-// When a client connects
-wss.on('connection', (ws) => {
-  console.log('New client connected');
+const serverPort = process.env.PORT || 3000; // Define the server port
 
-  // Receive messages from the client
-  ws.on('message', (message) => {
-    console.log(`Received message: ${message}`);
-    
-    // Echo the message back to the client
-    ws.send(`Server received: ${message}`);
-  });
+// Middleware for parsing JSON
+app.use(express.json()); // This line parses JSON request bodies
 
-  // Handle disconnection
-  ws.on('close', () => {
-    console.log('Client disconnected');
-  });
-});
+// Register your routes
+    // app.get('/', switchLeaderboardHandler)
+    app.get('/showScore', ShowScoreHandler)
 
-const dbHost = process.env.DB_HOST;
-const dbPort = process.env.DB_PORT || 5432; // Default PostgreSQL port
-const dbUser = process.env.DB_USER;
-const dbPassword = process.env.DB_PASSWORD;
-const dbName = process.env.DB_NAME;
-
-const serverPort = process.env.PORT || 3000;
-
-const dbPool = new Pool({
-  host: dbHost,
-  port: dbPort,
-  user: dbUser,
-  password: dbPassword,
-  database: dbName,
-});
-
-// Connect to PostgreSQL
-async function connectDB() {
-  try {
-    await dbPool.connect();
-    console.log('Connected to PostgreSQL');
-  } catch (err) {
-    console.error('Connection to PostgreSQL failed:', err.stack);
-    process.exit(1); // Exit the application if the connection fails
-  }
-}
 
 // Start the server and database connection
 async function startServer() {
-  await connectDB();
+  await connectDB(); // Connect to PostgreSQL
   server.listen(serverPort, () => {
     console.log(`Server is running on http://localhost:${serverPort}`);
   });
@@ -65,7 +27,7 @@ async function startServer() {
 // Gracefully shut down the server
 process.on('SIGINT', async () => {
   console.log('Shutting down server...');
-  await dbPool.end(); // Close the database connection pool
+  await wss.close(); // Close WebSocket server
   process.exit(0); // Exit the application
 });
 
