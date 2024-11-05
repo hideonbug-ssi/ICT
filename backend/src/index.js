@@ -1,17 +1,32 @@
+// src/index.js
 const express = require('express');
-const dotenv = require('dotenv');
-
-dotenv.config(); 
+const http = require('http');
+const WebSocket = require('ws');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
 
-app.use(express.json());
+// When a client connects
+wss.on('connection', (ws) => {
+  console.log('New client connected');
 
-app.get('/', (req, res) => {
-  res.send('Hello, Node.js Backend!');
+  // Receive messages from the client
+  ws.on('message', (message) => {
+    console.log(`Received message: ${message}`);
+    
+    // Echo the message back to the client
+    ws.send(`Server received: ${message}`);
+  });
+
+  // Handle disconnection
+  ws.on('close', () => {
+    console.log('Client disconnected');
+  });
 });
 
-app.listen(PORT, () => {
+// Start the server
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
