@@ -1,4 +1,4 @@
-import {emit} from "../common/express";
+const  { emit } = require('../common/express')
 
 const sendScore = () => {
     // Query database
@@ -12,3 +12,5 @@ const sendScore = () => {
 
     emit(result)
 }
+
+module.exports = { sendScore }

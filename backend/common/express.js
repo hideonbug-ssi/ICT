@@ -1,11 +1,11 @@
 const express = require('express')
 const http = require('http')
 const WebSocket = require('ws')
-const {switchLeaderboardHandler} = require("../endpoint/switch_leaderboard");
+// const {switchLeaderboardHandler} = require("../endpoint/switch_leaderboard");
 
 const app = express()
 const server = http.createServer(app)
-const wss = new WebSocket.Server({ server })
+const wss = new WebSocket.Server({ server, path: '/leaderboard' })
 
 wss.on('connection', (ws) => {
     console.log('New client connected')
@@ -24,16 +24,12 @@ wss.on('connection', (ws) => {
     })
 })
 
-const emit = (message) => {
+function emit (message) {
     wss.clients.forEach((client) => {
         if (client.readyState === WebSocket.OPEN) {
-            client.send(message)
+            client.send(JSON.stringify(message));
         }
     })
 }
 
-const register = () => {
-    app.get('/', switchLeaderboardHandler)
-}
-
-module.exports = { wss, app, emit}
+module.exports = { wss, app, emit, server}
