@@ -39,4 +39,21 @@ const showTeamScores = async () => {
   }
 };
 
-module.exports = { sendScore, showTeamScores };
+const ShowScoreLeaderboard = async () => {
+  try{
+    const result = await dbPool.query("SELECT s.team_id AS id,t.team_name as name, s.score FROM score s JOIN team t ON s.team_id = t.team_id order by score Desc");
+    const final_result = {
+            event: "lb/state",
+            payload:{
+                rankings: result.rows,
+            }
+        }
+        // Emit the result with structured payload
+        emit(final_result);
+  }catch(error){
+    console.error("Error processing score:", error);
+    result.push({ success: false, message: "Unexpected error occurred" });
+}
+};
+
+module.exports = { sendScore, showTeamScores, ShowScoreLeaderboard };
