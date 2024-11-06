@@ -13,7 +13,7 @@ app.use(express.json()); // This line parses JSON request bodies
 
 // Register your routes
     // app.get('/', switchLeaderboardHandler)
-    app.get('/showScore', ShowScoreHandler)
+    app.post('/showScore', ShowScoreHandler)
 
 
 // Start the server and database connection
