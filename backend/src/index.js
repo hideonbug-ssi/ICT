@@ -1,32 +1,33 @@
-// src/index.js
+// Import required modules
 const express = require('express');
 const http = require('http');
-const WebSocket = require('ws');
+const dotenv = require('dotenv'); // To load environment variables
+const { connectDB } = require('./config/postgres'); // PostgreSQL connection
+const setupWebSocket = require('./config/websocket'); // WebSocket setup
+const RandomBonusCardController = require('./controllers/RandomBonusCard'); // Controller for bonus card update
 
-const app = express();
-const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
+dotenv.config(); // Load environment variables from .env
 
-// When a client connects
-wss.on('connection', (ws) => {
-  console.log('New client connected');
+const app = express(); // Create an Express app
+const server = http.createServer(app); // Create an HTTP server
 
-  // Receive messages from the client
-  ws.on('message', (message) => {
-    console.log(`Received message: ${message}`);
-    
-    // Echo the message back to the client
-    ws.send(`Server received: ${message}`);
-  });
+// Middleware to parse JSON in request body
+app.use(express.json());
 
-  // Handle disconnection
-  ws.on('close', () => {
-    console.log('Client disconnected');
-  });
-});
+// Connect to PostgreSQL database
+connectDB(); 
+
+// Define a route for updating bonus cards
+app.post('/bonuscards', RandomBonusCardController.updateBonusCards);
+
+// Setup WebSocket
+setupWebSocket(server); 
+
+// Define the port (default to 3000 if not in .env)
+const PORT = process.env.PORT || 3000;
 
 // Start the server
-const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
