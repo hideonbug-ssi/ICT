@@ -1,5 +1,5 @@
 const { sendScore } = require("../service/send_score");
-const { ShowScoreHandler } = require("../service/send_score"); // Adjust to the correct function name
+const { showTeamScores } = require("../service/send_score"); // Adjust to the correct function name
 const { emit } = require("../common/express");
 
 const ShowScoreHandler = async (req, res) => {
@@ -39,7 +39,7 @@ const ShowScoreHandler = async (req, res) => {
   }
 
   // Fetch all scores in descending order
-  const sortedScores = await getScoresDescending();
+  const sortedScores = await showTeamScores();
 
   // Send back the sorted scores and results of all operations
   res.status(207).json({ message: "Scores processed", results, sortedScores });
