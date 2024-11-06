@@ -19,5 +19,3 @@ const getCardFromDB = async (cardId, topicId) => {
 
 module.exports = { getCardFromDB };
 
-// แยก round  & 
-//
