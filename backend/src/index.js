@@ -5,6 +5,7 @@ const { app, wss, register, server } = require('../common/express.js'); // Assum
 const { connectDB } = require('../common/postgres.js'); // Import the connect function to connect to PostgreSQL
 const test = require('../endpoint/test'); // Import your test routes
 const { ShowScoreHandler } = require('../endpoint/show_score.js');
+const { ShowLeaderboardHandler } = require('../endpoint/switch_leaderboard.js');
 
 const serverPort = process.env.PORT || 3000; // Define the server port
 
@@ -13,7 +14,8 @@ app.use(express.json()); // This line parses JSON request bodies
 
 // Register your routes
     // app.get('/', switchLeaderboardHandler)
-    app.get('/showScore', ShowScoreHandler)
+    app.post('/showScore', ShowScoreHandler)
+    app.get('/showLeaderboard', ShowLeaderboardHandler)
 
 
 // Start the server and database connection
