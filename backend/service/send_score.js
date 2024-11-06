@@ -1,38 +1,42 @@
 const { emit } = require("../common/express");
-const { dbPool } = require("../common/postgres");
+const { dbPool } = require("../common/postgres"); // Ensure dbPool is imported correctly
 
-// const sendScore = () => {
-//     // Query database
-//     const result = [
-//         {
-//             id: 1,
-//             name: "Team AAA",
-//             score: 100,
-//         }
-//     ]
-
-//     emit(result)
-// }
-const sendScore = async (team_name, score) => {
+const sendScore = async (round_id, team_id, score) => {
   try {
-    //P'thun commented to create score 
+    // Attempt to insert a new score into the "score" table
     const result = await dbPool.query(
-      "UPDATE team SET score = $1 WHERE team_name = $2 RETURNING *",
-      [
-        score, team_name
-      ]
+      "INSERT INTO score (round_id, team_id, score) VALUES ($1, $2, $3) RETURNING *",
+      [round_id, team_id, score]
     );
 
-    if (result.rowCount === 0) {
-      console.log(`No team found with name ${team_name}`);
-      return emit({ message: "No team found with that name" });
-    }
-
-    // Emitting the updated data
-    emit(result.rows[0]); // `result.rows[0]` contains the updated row
+    // Emit the inserted row if successful
+    emit(result.rows[0]);
   } catch (error) {
-    console.error("Error updating data in PostgreSQL:", error);
+    // Check if the error is due to a unique constraint violation
+    if (error.code === "23505") {
+      console.error(
+        `Duplicate entry for round_id ${round_id} and team_id ${team_id}:`,
+        error
+      );
+      emit({
+        message: `A score for team_id ${team_id} in round_id ${round_id} already exists`,
+      });
+    } else {
+      console.error("Error inserting data in PostgreSQL:", error);
+    }
   }
 };
 
-module.exports = { sendScore };
+const showTeamScores = async () => {
+  try {
+    const result = await dbPool.query(
+      "SELECT * FROM score ORDER BY score DESC"
+    );
+    return { success: true, data: result.rows };
+  } catch (error) {
+    console.error("Error retrieving scores:", error);
+    return { success: false, message: "Error retrieving scores" };
+  }
+};
+
+module.exports = { sendScore, showTeamScores };
