@@ -32,7 +32,7 @@ const showTeamScores = async () => {
     const result = await dbPool.query(
       "SELECT * FROM score ORDER BY score DESC"
     );
-    return { success: true, data: result.rows };
+    emit(result.rows);
   } catch (error) {
     console.error("Error retrieving scores:", error);
     return { success: false, message: "Error retrieving scores" };
