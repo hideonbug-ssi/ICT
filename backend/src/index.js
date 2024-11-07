@@ -8,6 +8,7 @@ const { ShowScoreHandler } = require('../endpoint/show_score.js');
 const {ShowCardHandler} = require('../endpoint/show_card.js');
 const { ShowRandomedTeamHandler } = require('../endpoint/show_randomed_team,.js');
 const { ShowLeaderboardHandler } = require('../endpoint/switch_leaderboard.js');
+const { PreviewTeamsHandler } = require('../endpoint/preview_teams.js');
 
 const serverPort = process.env.PORT || 3000; // Define the server port
 
@@ -20,6 +21,7 @@ app.get('/showCard', ShowCardHandler)
 app.get('/team', ShowRandomedTeamHandler)
 app.post('/showScore', ShowScoreHandler)
 app.get('/showLeaderboard', ShowLeaderboardHandler)
+app.get('/previewTeams', PreviewTeamsHandler)
 
 
 // Start the server and database connection
