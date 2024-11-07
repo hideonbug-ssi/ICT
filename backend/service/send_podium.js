@@ -16,22 +16,22 @@ const sendPodiums = async () => {
 
         // Calculate percentile for each team and format the result
         const score_sorting_result = teams.map((team, index) => {
-            const percentile = (totalTeams - index - 1) / (totalTeams - 1);
+            // const percentile = (totalTeams - index - 1) / (totalTeams - 1);
             return {
-                id: team.team_id,
+                id: team.team_id, 
                 name: team.name,
-                percentile: percentile
+                score: team.total_score
             };
         });
-
+        // console.log(score_sorting_result)
         const final_result = {
-            event: "lb/podium",
+            event: "lb/podium", 
             payload:{
                 rankings: score_sorting_result
             }
         }
-        // Emit the result with structured payload
-        emit(final_result);
+
+        emit(final_result); 
     } catch (error) {
         console.error("Error fetching or processing scores:", error);
     }
