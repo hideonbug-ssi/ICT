@@ -6,21 +6,22 @@ const getRandomedTeamFromDB = async () => {
     let client;
     try {
         client = await dbPool.connect();
-        const teams = await getTeams(client);  
+        const teams = await getTeams(client);  // Get all teams from DB
         const latest_round = await client.query('SELECT MAX(round_id) FROM round');
         const round = parseInt(latest_round.rows[0].max) + 1 || 1;
 
         const turn = await getTurnedTeams(client);
-        if (turn.length + 1 === 6) {  // If there are 6 turned teams, reset
+        if (turn.length === 6) {  
             assignedTeams = [];  
         }  
 
         // Filter out the teams that have already been assigned
         let candidates = teams.filter(team => !turn.some(t => t.selector_team_id === team.team_id));
-        if(turn.length + 1 > 6)
+        if(turn.length >= 6)
         {
             candidates = teams.filter(team => turn.some(t => t.selector_team_id === team.team_id));
-        }
+        } 
+        console.log("Candidates length : "+candidates.length)
 
         if (candidates.length === 0) {
             console.log("All teams have been assigned. Stopping assignment process.");
@@ -45,8 +46,8 @@ const getRandomedTeamFromDB = async () => {
         
         await assignTeamToRound(client, selectedTeam.team_id, round);
         console.log(`Assigned Team: (ID: ${selectedTeam.team_id})`);
-        
-        return { highlighted_id: selectedTeam.team_id };
+        console.log("Team assignment completed successfully.");
+        return selectedTeam.team_id;
     } catch (error) {
         console.error("Error assigning teams:", error);
     } finally {
@@ -61,7 +62,7 @@ const getTeams = async (client) => {
 };
 
 const getTurnedTeams = async (client) => {
-    const res = await client.query('SELECT selector_team_id FROM round');
+    const res = await client.query('SELECT selector_team_id FROM round WHERE round_id != 0');
     return res.rows;
 };
 

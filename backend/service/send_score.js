@@ -1,5 +1,7 @@
 const { emit } = require("../common/express");
 const { dbPool } = require("../common/postgres"); // Ensure dbPool is imported correctly
+const { ShowRandomedTeamHandler } = require("../endpoint/show_randomed_team,");
+const { getRandomedTeamFromDB } = require("./get_randomed_team");
 
 const sendScore = async (round_id, team_id, score) => {
   try {
@@ -41,9 +43,11 @@ const showTeamScores = async () => {
 
 const ShowScoreLeaderboard = async () => {
   try{
+    const highlighted_team = await getRandomedTeamFromDB();
     const result = await dbPool.query("SELECT s.team_id AS id,t.team_name as name, sum(s.score) as score FROM score s JOIN team t ON s.team_id = t.team_id group by s.team_id, t.team_name order by score Desc");
     const final_result = {
             event: "lb/state",
+            highlighted_id: highlighted_team,
             payload:{
                 rankings: result.rows,
             }
