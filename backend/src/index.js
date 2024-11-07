@@ -8,6 +8,8 @@ const { ShowScoreHandler } = require('../endpoint/show_score.js');
 const {ShowCardHandler} = require('../endpoint/show_card.js');
 const { ShowRandomedTeamHandler } = require('../endpoint/show_randomed_team,.js');
 const { ShowLeaderboardHandler } = require('../endpoint/switch_leaderboard.js');
+const {CardDismissedHandler} = require('../endpoint/dismiss_card.js');
+const {startCardCountdown} = require('../endpoint/dismiss_card.js');
 
 const serverPort = process.env.PORT || 3000; // Define the server port
 
@@ -18,8 +20,10 @@ app.use(express.json()); // This line parses JSON request bodies
 app.get('/showScore', ShowScoreHandler)
 app.get('/showCard', ShowCardHandler)
 app.get('/team', ShowRandomedTeamHandler)
-app.post('/showScore', ShowScoreHandler)
 app.get('/showLeaderboard', ShowLeaderboardHandler)
+app.patch('/dismissCard', CardDismissedHandler)
+app.get('/countdownCard', startCardCountdown)
+
 
 
 // Start the server and database connection
