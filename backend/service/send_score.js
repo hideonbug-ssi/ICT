@@ -44,7 +44,7 @@ const showTeamScores = async () => {
 const ShowScoreLeaderboard = async () => {
   try{
     const highlighted_team = await getRandomedTeamFromDB();
-    const result = await dbPool.query("SELECT s.team_id AS id,t.team_name as name, sum(s.score) as score FROM score s JOIN team t ON s.team_id = t.team_id group by s.team_id, t.team_name order by score Desc");
+    const result = await dbPool.query("SELECT team.team_id AS id, team.team_name AS name, (SELECT COALESCE(SUM(score.score),0) FROM score WHERE score.team_id = team.team_id) AS score FROM team ORDER BY score DESC");
     const final_result = {
             event: "lb/state",
             highlighted_id: highlighted_team,
