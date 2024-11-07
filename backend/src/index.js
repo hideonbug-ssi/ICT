@@ -7,6 +7,7 @@ const test = require('../endpoint/test'); // Import your test routes
 const { ShowScoreHandler } = require('../endpoint/show_score.js');
 const {ShowCardHandler} = require('../endpoint/show_card.js');
 const { ShowRandomedTeamHandler } = require('../endpoint/show_randomed_team,.js');
+const { ShowLeaderboardHandler } = require('../endpoint/switch_leaderboard.js');
 
 const serverPort = process.env.PORT || 3000; // Define the server port
 
@@ -18,6 +19,9 @@ app.use(express.json()); // This line parses JSON request bodies
 app.get('/showScore', ShowScoreHandler)
 app.get('/showCard', ShowCardHandler)
 app.get('/team', ShowRandomedTeamHandler)
+    app.post('/showScore', ShowScoreHandler)
+    app.get('/showLeaderboard', ShowLeaderboardHandler)
+
 
 // Start the server and database connection
 async function startServer() {
