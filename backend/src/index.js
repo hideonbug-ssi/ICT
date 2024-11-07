@@ -16,7 +16,6 @@ const serverPort = process.env.PORT || 3000; // Define the server port
 app.use(express.json()); // This line parses JSON request bodies
 
 // Register your routes
-app.get('/showScore', ShowScoreHandler)
 app.get('/showCard', ShowCardHandler)
 app.get('/team', ShowRandomedTeamHandler)
 app.post('/showScore', ShowScoreHandler)
