@@ -30,7 +30,7 @@ const getCardFromDB = async () => {
             topic.cards.push({
                 id: row.id,
                 score: row.score,
-                opened: row.opened === 1 // Assuming `round_number` indicates opened state
+                opened: row.opened != null 
             });
 
             return acc;
