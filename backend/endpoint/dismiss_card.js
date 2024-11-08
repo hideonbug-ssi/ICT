@@ -36,11 +36,11 @@ const startCardCountdown = async (req, res) => {
             if (remainingTime <= 0) {
                 clearInterval(countdownIntervals[cardId]);
                 delete countdownIntervals[cardId];
-                await makeCardDismissed(cardId, roundId); 
-                emit({
-                    event: 'cd/dismiss',
-                    payload: null
-                });
+                // await makeCardDismissed(cardId, roundId); 
+                // emit({
+                //     event: 'cd/dismiss',
+                //     payload: null
+                // });
             }
         }, 1000); // Run every 1 second
         res.status(200).send('Countdown started successfully');
