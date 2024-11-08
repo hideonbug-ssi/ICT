@@ -1,5 +1,5 @@
 const { emit } = require('../common/express');  // Emit function to send messages to WebSocket clients
-const { getCardFromDB } = require('../service/get_card'); // Service to fetch card data from DB
+const { openCardFromDB } = require('../service/get_card'); // Service to fetch card data from DB
 
 const ShowCardHandler = async (req, res) => {
     try {
@@ -7,7 +7,7 @@ const ShowCardHandler = async (req, res) => {
         const topicId = req.body.topicId;
         console.log('cardId', cardId);
         console.log('topicId', topicId);
-        const cardData = await getCardFromDB(cardId, topicId);
+        const cardData = await openCardFromDB(cardId, topicId);
         const card = cardData[0]; 
         const payload = {
             event: "cd/open",
