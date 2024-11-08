@@ -9,7 +9,7 @@ const getCardFromDB = async () => {
             SELECT t.topic AS title, c.card_id AS id, c.score, c.round_number AS opened
             FROM card c
             JOIN topic t ON c.topic_id = t.topic_id
-            ORDER BY t.topic_id, c.score;
+            ORDER BY t.topic_id, c.card_id;
         `;
 
         const { rows } = await client.query(query);
