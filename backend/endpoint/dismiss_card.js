@@ -67,6 +67,7 @@ const CardDismissedHandler = async (req, res) => {
         const roundId = req.body.roundId;
         
         await makeCardDismissed(cardId, roundId);
+
         stopCardCountdown(cardId); // Stop countdown if dismissed manually
         emit({
             event: 'cd/dismiss',
