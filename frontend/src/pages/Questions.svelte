@@ -13,7 +13,7 @@
 	let openQuestion: OpenQuestion
 
 	const client = ArtWS.connect(
-		'ws://localhost:3000/leaderboard',
+		'ws://server.petchpailin.com:10320/leaderboard',
 		{
 			log: true, // Log for console.warning
 			reconnect: true, // Reconnect on close

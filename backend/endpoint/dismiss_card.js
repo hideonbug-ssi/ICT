@@ -36,7 +36,7 @@ const startCardCountdown = async (req, res) => {
             if (remainingTime <= 0) {
                 clearInterval(countdownIntervals[cardId]);
                 delete countdownIntervals[cardId];
-                await makeCardDismissed(cardId, roundId); 
+                
                 emit({
                     event: 'cd/dismiss',
                     payload: null
@@ -67,6 +67,7 @@ const CardDismissedHandler = async (req, res) => {
         const roundId = req.body.roundId;
         
         await makeCardDismissed(cardId, roundId);
+
         stopCardCountdown(cardId); // Stop countdown if dismissed manually
         emit({
             event: 'cd/dismiss',
