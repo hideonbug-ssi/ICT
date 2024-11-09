@@ -11,13 +11,13 @@ const getRandomedTeamFromDB = async () => {
         const round = parseInt(latest_round.rows[0].max) + 1 || 1;
 
         const turn = await getTurnedTeams(client);
-        if (turn.length === 6) {  
+        if (turn.length === 10) {  
             assignedTeams = [];  
         }  
 
         // Filter out the teams that have already been assigned
         let candidates = teams.filter(team => !turn.some(t => t.selector_team_id === team.team_id));
-        if(turn.length >= 6)
+        if(turn.length >= 10)
         {
             candidates = teams.filter(team => turn.some(t => t.selector_team_id === team.team_id));
         } 
