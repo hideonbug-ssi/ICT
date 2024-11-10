@@ -1,4 +1,4 @@
-const { sendScore } = require("../service/send_score");
+const { sendScore, RandomLeaderboard } = require("../service/send_score");
 const { ShowScoreLeaderboard } = require("../service/send_score"); // Adjust to the correct function name
 const { emit } = require("../common/express");
 
@@ -13,4 +13,9 @@ const ShowLeaderboardHandler = async (req,res) => { // Expecting an array of sco
   res.status(207).json({ message: "Scores processed", results, sortedScores });
 };
 
-module.exports = {ShowLeaderboardHandler };
+const RandomedTeamHandler = async (req, res) => {
+  const team = await RandomLeaderboard();
+  res.status(200).json(team);
+}
+
+module.exports = {ShowLeaderboardHandler, RandomedTeamHandler };

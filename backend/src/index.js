@@ -6,7 +6,7 @@ const { ShowScoreHandler } = require('../endpoint/show_score.js');
 const {ShowCardHandler} = require('../endpoint/show_card.js');
 const {ShowAllCardHandler} = require('../endpoint/show_all_card.js')
 const { ShowRandomedTeamHandler } = require('../endpoint/show_randomed_team,.js');
-const { ShowLeaderboardHandler } = require('../endpoint/switch_leaderboard.js');
+const { ShowLeaderboardHandler, RandomedTeamHandler } = require('../endpoint/switch_leaderboard.js');
 const { PreviewTeamsHandler } = require('../endpoint/preview_teams.js');
 const {CardDismissedHandler} = require('../endpoint/dismiss_card.js');
 const {startCardCountdown} = require('../endpoint/dismiss_card.js');
@@ -28,6 +28,7 @@ app.get('/countdownCard', startCardCountdown)
 app.get('/showPodium', ShowPodiumHandler)
 app.get('/openCard', ShowCardHandler)
 app.get('/showPodiumSplit', ShowPodiumSplitHandler)
+app.get('/randomTeam', RandomedTeamHandler)
  
  
 // Start the server and database connection

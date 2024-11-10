@@ -43,6 +43,29 @@ const showTeamScores = async () => {
 
 const ShowScoreLeaderboard = async () => {
   try {
+    const result = await dbPool.query("SELECT team.team_id AS id, team.team_name AS name, (SELECT COALESCE(SUM(score.score),0) FROM score WHERE score.team_id = team.team_id) AS score FROM team ORDER BY score DESC");
+    const final_result = {
+      event: "lb/state",
+      payload: {
+        rankings: result.rows.map((result, index) => {
+          return {
+            id: result.id,
+            name: result.name,
+            score: parseInt(result.score),
+          }
+        }),
+      }
+    }
+    // Emit the result with structured payload
+    emit(final_result);
+  } catch (error) {
+    console.error("Error processing score:", error);
+    result.push({ success: false, message: "Unexpected error occurred" });
+  }
+};
+
+const RandomLeaderboard = async () => {
+  try {
     const highlighted_team = await getRandomedTeamFromDB();
     const result = await dbPool.query("SELECT team.team_id AS id, team.team_name AS name, (SELECT COALESCE(SUM(score.score),0) FROM score WHERE score.team_id = team.team_id) AS score FROM team ORDER BY score DESC");
     const final_result = {
@@ -66,4 +89,4 @@ const ShowScoreLeaderboard = async () => {
   }
 };
 
-module.exports = { sendScore, showTeamScores, ShowScoreLeaderboard };
+module.exports = { sendScore, showTeamScores, ShowScoreLeaderboard, RandomLeaderboard };
