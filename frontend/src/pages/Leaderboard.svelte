@@ -15,7 +15,7 @@
 	let teamsPodium: Array<Team> = []
     let teamsBoard: Array<Team> = []
 	const client = ArtWS.connect(
-	'ws://ictc-int.sit.kmutt.ac.th:3000/ws/projector/leaderboard?token=wdvXuDOytfx84J8d',
+	'ws://server.petchpailin.com:10320/leaderboard',
 		{
 			log: true, // Log for console.warning
 			reconnect: true, // Reconnect on close

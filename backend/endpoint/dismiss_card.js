@@ -67,6 +67,7 @@ const CardDismissedHandler = async (req, res) => {
         
         await makeCardDismissed(cardId, roundId);
         stopCardCountdown(cardId); 
+
         emit({
             event: 'cd/dismiss',
             payload: null

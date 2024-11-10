@@ -1,6 +1,8 @@
 const { emit } = require('../common/express');
 const { dbPool } = require('../common/postgres');
+
 const {getTurnedTeams} = require('./get_randomed_team')
+
 
 const sendPodiums = async () => {
     try {
@@ -24,7 +26,6 @@ const sendPodiums = async () => {
                 score: parseInt(team.total_score, 10)
             };
         });
-        console.log(score_sorting_result)
         const final_result = {
             event: "lb/podium", 
             payload:{

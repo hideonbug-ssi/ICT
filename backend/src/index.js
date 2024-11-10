@@ -1,5 +1,3 @@
-// index.js
-
 const express = require('express'); // Import the Express module
 const { app, wss, register, server } = require('../common/express.js'); // Assuming express.js exports your Express app and WebSocket server
 const { connectDB } = require('../common/postgres.js'); // Import the connect function to connect to PostgreSQL

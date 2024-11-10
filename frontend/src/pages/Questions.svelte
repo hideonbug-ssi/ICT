@@ -13,7 +13,7 @@
 	let openQuestion: OpenQuestion
 
 	const client = ArtWS.connect(
-		'ws://ictc-int.sit.kmutt.ac.th:3000/ws/projector/card?token=wdvXuDOytfx84J8d',
+		'ws://server.petchpailin.com:10320/leaderboard',
 		{
 			log: true, // Log for console.warning
 			reconnect: true, // Reconnect on close
