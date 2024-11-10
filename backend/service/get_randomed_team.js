@@ -5,6 +5,7 @@ const getRandomedTeamFromDB = async () => {
     let client;
     try {
         client = await dbPool.connect();
+
         const teams = await getTeams(client); 
         
         const latestRoundResult = await client.query('SELECT MAX(round_id) FROM round');
@@ -27,6 +28,7 @@ const getRandomedTeamFromDB = async () => {
         
         await assignTeamToRound(client, selectedTeam.team_id, round);
 
+
         return selectedTeam.team_id;
     } catch (error) {
         console.error("Error assigning teams:", error);
@@ -40,6 +42,7 @@ const getTeams = async (client) => {
     return res.rows;
 };
 
+
 const getTurnedTeamsForBigRound = async (client, bigRound) => {
     const startRound = bigRound * 10 + 1;
     const endRound = (bigRound + 1) * 10;
@@ -50,10 +53,12 @@ const getTurnedTeamsForBigRound = async (client, bigRound) => {
     return res.rows;
 };
 
+
 const getTurnedTeams = async (client) => {
     const res = await client.query('SELECT selector_team_id FROM round WHERE round_id != 0');
     return res.rows;
 };
+
 
 const assignTeamToRound = async (client, teamId, round) => {
     const query = 'INSERT INTO round (selector_team_id, round_id) VALUES ($1, $2)';
@@ -61,3 +66,4 @@ const assignTeamToRound = async (client, teamId, round) => {
 };
 
 module.exports = { getRandomedTeamFromDB , getTurnedTeams};
+

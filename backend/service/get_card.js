@@ -45,6 +45,7 @@ const getCardFromDB = async () => {
     }
 };
 
+
 const openCardFromDB = async (cardId) => {
     try {
         const client = await dbPool.connect(); 
@@ -54,6 +55,7 @@ const openCardFromDB = async (cardId) => {
         console.log('Query result:', rows.rows);
         client.release(); 
         return rows.rows;  
+
     } catch (err) {
         console.error('Error fetching card data:', err);
         throw err; 
