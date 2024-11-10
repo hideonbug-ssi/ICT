@@ -10,6 +10,7 @@
 	export let heightCard: string
 	export let widthImg: string
 	export let textSize: string
+	export let cardNumber: number
 	export let handleFlipCard: (
 		topicId: number,
 		cardId: number
@@ -20,17 +21,42 @@
 
 <div>
 	<div
-		class="bg-white rounded-2xl flex flex-col justify-center items-center"
-		style="width: {widthCard}; height: {heightCard}"
+		class="bg-white rounded-2xl flex flex-row justify-center items-center"
+		style="width: {widthCard}; height: {heightCard}; gap: 1rem"
 		on:click={() => {
 			handleFlipCard(topicId, cardId)
 		}}
 	>
+		<div
+			class="w-16 h-16 absolute -left-2 -top-2 rounded-lg flex flex-col justify-center items-center {cardNumber ==
+			1 || cardNumber == 2
+				? 'bg-green-500 drop-shadow-lg'
+				: cardNumber == 3 || cardNumber == 4
+				? 'bg-indigo-500 drop-shadow-lg'
+				: cardNumber == 5 || cardNumber == 6
+				? 'bg-red-500 drop-shadow-lg'
+				: ''}"
+		>
+			<p class="font-semibold text-white text-3xl">{cardNumber}</p>
+		</div>
+		<!-- {#if score == 100}
+			<p class="font-semibold {textColor}" style="font-size: 1rem">
+				Easy
+			</p>
+		{:else if score == 200}
+			<p class="font-semibold {textColor}" style="font-size: 1rem">
+				Medium
+			</p>
+		{:else if score == 300}
+			<p class="font-semibold {textColor}" style="font-size: 1rem">
+				Hard
+			</p>
+		{/if} -->
 		<img
 			src={img}
 			alt="logo"
 			class="mb-1"
-			style="width: {widthImg} ; height: {widthImg}"
+			style="width: {widthImg} ; height: {widthImg}; margin: 0 0 0 1rem"
 		/>
 		<div class="flex items-center">
 			<img

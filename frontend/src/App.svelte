@@ -7,25 +7,20 @@
 	import Questions from './pages/Questions.svelte'
 	import StudentPage from './pages/StudentPage.svelte'
 	import Podium from './pages/Podium.svelte'
+	import AdminPage from './pages/Admin.svelte'
 </script>
 
 <Router>
-	<Route path="/">
-		<Preview />
-	</Route>
-	<Route path="/about">
-		<About />
-	</Route>
-	<Route path="/podium">
-		<Podium />
-	</Route>
+<!--	WE USE THIS -->
 	<Route path="/leaderboard">
 		<Leaderboard />
 	</Route>
+	<!--	WE USE THIS -->
 	<Route path="/question">
 		<Questions />
 	</Route>
-	<Route path="/student">
-		<StudentPage />
+	<!--	WE USE THIS -->
+	<Route path="/admin">
+		<AdminPage />
 	</Route>
 </Router>
