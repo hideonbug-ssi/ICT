@@ -9,7 +9,7 @@
 
 	let name: string = ''
 	const client = ArtWS.connect(
-		'ws://ictc-int.sit.kmutt.ac.th:3000/ws/student?token=XrO3ole8bS83OQ3p',
+		import.meta.env.VITE_WS_URL,
 		{
 			log: true, // Log for console.warning
 			reconnect: true, // Reconnect on close

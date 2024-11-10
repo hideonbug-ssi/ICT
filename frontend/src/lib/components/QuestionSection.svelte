@@ -14,6 +14,8 @@
 	import FlippedCard from './FlippedCard.svelte'
 
 	import { onDestroy } from 'svelte'
+	import { axios } from '../../utils/api'
+	import Swal from 'sweetalert2'
 
 	let showModal = false
 	let cardId: number
@@ -23,25 +25,40 @@
 	let minute = 0
 	let sec = 0
 	let socketRetrieve: boolean = false
+	let first = true
 	export let question: Topic
 	export let colIndex: number
 	export let openQuestion: OpenQuestion
 	export let client
 
 	const widthCard: string = '324px'
-	const heightCard: string = '180px'
+	const heightCard: string = '120px'
 	const widthImg: string = '88px'
 	const textSize: string = '40px'
-	const iconSize: string = '120px'
+	const iconSize: string = '96px'
 
 	const unsubscribeclient2 = client.subscribe('cd/open', (payload) => {
 		openQuestion = payload
 		handleOpenModal(payload.question_id, cardIndex)
+		console.log(payload)
+		console.log(payload.imageUrl)
 	})
 	const unsubscribeclient3 = client.subscribe('cd/countdown', (payload) => {
+		console.log(payload)
 		minute = payload.m
 		sec = payload.s
 		socketRetrieve = true
+		if (first) {
+			axios
+				.patch('/am/card/pause')
+				.then((res) => {
+					console.log('pause time sucess')
+					first = !first
+				})
+				.catch((err) => {
+					console.log(err)
+				})
+		}
 	})
 
 	onDestroy(() => {
@@ -94,13 +111,14 @@
 	<div class="h-[620px] flex flex-col justify-between">
 		{#each question.cards as card, i (i)}
 			<div class={card.opened && 'flipped'}>
-				<div class="flip-card">
+				<div class="flip-card mb-40">
 					<div class="flip-card-inner">
 						<div class="flip-card-front">
 							<QuestionCard
 								img={icon}
 								score={card.score}
 								textColor={'text-color-' + (colIndex + 1)}
+								cardNumber={i + 1}
 								{widthCard}
 								{heightCard}
 								{widthImg}
@@ -129,6 +147,7 @@
 	{handleCloseModal}
 	{client}
 	{socketRetrieve}
+	bind:first
 />
 
 <style>

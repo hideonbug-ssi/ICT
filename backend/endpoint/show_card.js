@@ -7,18 +7,7 @@ const ShowCardHandler = async (req, res) => {
         console.log('cardId', cardId);
         const cardData = await openCardFromDB(cardId);
         const card = cardData[0];
-        // const payload = {
-        //     event: "cd/open",
-        //     payload: {
-        //         topic_id: card.topic_id,
-        //         card_id: card.card_id,
-        //         question: {
-        //             title: card.question,
-        //             image_url: card.image_url || ""  
-        //         },
-        //         bonus: card.bonus || false 
-        //     }
-        // };
+
         const payload = {
             event: "cd/open",
             payload: {

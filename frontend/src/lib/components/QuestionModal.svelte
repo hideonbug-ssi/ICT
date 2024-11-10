@@ -15,6 +15,7 @@
 	export let minute: number
 	export let sec: number
 	export let socketRetrieve: boolean
+	export let first: boolean
 	$: timerFinish = false
 
 	$: minute = minute
@@ -26,6 +27,7 @@
 	const unsubscribeclient4 = client.subscribe('cd/dismiss', (payload) => {
 		timerFinish = false
 		handleCloseModal(cardCol, cardIndex)
+		first = true
 	})
 
 	onDestroy(() => {
@@ -56,28 +58,28 @@
 			class="h-[850px] px-[200px] text-center leading-[96px] flex flex-col justify-center items-center z-50"
 		>
 			<p
-				class="text-white {openQuestion.question.title.length < 100
+				class="text-white {openQuestion.title.length < 100
 					? 'text-[60px]'
-					: openQuestion.question.title.length > 160
+					: openQuestion.title.length > 160
 					? 'text-[36px]'
 					: 'text-[48px]'} font-semibold z-50"
 			>
-				{@html openQuestion.question.title}
+				{@html openQuestion.title}
 			</p>
 
-			{#if openQuestion.question.image_url != ''}
+			{#if openQuestion.imageUrl != ''}
 				<div class="w-3/4 flex justify-center">
-					<img src={openQuestion.question.image_url} alt="img" />
+					<img src={openQuestion.imageUrl} alt="img" />
 				</div>
 			{/if}
 		</div>
-		<div class="flex justify-center z-50">
+		<div class="flex justify-end z-50 self-end mr-8 mb-8">
 			<div
 				class="h-[96px] flex flex-row justify-end items-end text-white font-medium"
 			>
-				<div class=" flex justify-center">
+				<div class=" flex justify-end">
 					<div
-						class="rounded-[20px] h-[90px] flex items-center timer-bg"
+						class="rounded-[20px] h-[90px] flex items-end timer-bg"
 					>
 						<p class="text-[48px] px-6 text-center" id="timer">
 							{minute} : {sec > 9 ? sec : '0' + sec}

@@ -7,13 +7,14 @@
 	import { onDestroy } from 'svelte'
 
 	import { Circle } from 'svelte-loading-spinners'
+	import {urlParser} from "../utils/urlParser";
 
 	let questions: Question
 
 	let openQuestion: OpenQuestion
 
 	const client = ArtWS.connect(
-		'ws://ictc-int.sit.kmutt.ac.th:3000/ws/projector/card?token=wdvXuDOytfx84J8d',
+		import.meta.env.VITE_WS_URL,
 		{
 			log: true, // Log for console.warning
 			reconnect: true, // Reconnect on close
@@ -34,7 +35,7 @@
 
 <main class="bg-[#1B2D51] h-screen w-screen px-16 py-10">
 	{#if questions != null}
-		<div class="flex justify-between mt-3">
+		<div class="flex justify-between mt-3 px-24">
 			{#each questions.topics as question, i (i)}
 				<QuestionSection
 					{question}
