@@ -1,5 +1,6 @@
 const { emit } = require('../common/express');
 const { dbPool } = require('../common/postgres');
+const {getTurnedTeams} = require('./get_randomed_team')
 
 const sendPodiums = async () => {
     try {
@@ -20,10 +21,10 @@ const sendPodiums = async () => {
             return {
                 id: team.team_id, 
                 name: team.name,
-                score: team.total_score
+                score: parseInt(team.total_score, 10)
             };
         });
-        // console.log(score_sorting_result)
+        console.log(score_sorting_result)
         const final_result = {
             event: "lb/podium", 
             payload:{
@@ -37,4 +38,44 @@ const sendPodiums = async () => {
     }
 }
 
-module.exports = { sendPodiums };
+const sendPodiumSplitRound = async () => {
+    try{
+        const client = await dbPool.connect();
+        const turn = await getTurnedTeams(client);
+        let result = [];
+        if (turn.length > 10) {  
+            result = await client.query(`
+            SELECT t.team_id, t.team_name AS name, t.school, SUM(s.score) AS total_score
+            FROM score s
+            JOIN team t ON s.team_id = t.team_id
+            WHERE s.round_id > 10
+            GROUP BY t.team_id, t.team_name, t.school
+            ORDER BY total_score DESC
+        `)
+        } 
+
+        const score_sorting_result = result.rows.map((team, index) => {
+            return {
+                id: team.team_id, 
+                name: team.name,
+                score: parseInt(team.total_score, 10)
+            };
+        });
+
+        const final_result = {
+            event: "lb/podium", 
+            payload:{
+                rankings: score_sorting_result
+            }
+        }
+
+        emit(final_result);
+
+        // console.log(result);
+        // return result;
+    }catch (error) {
+        console.error("Error fetching or processing scores:", error);
+    }
+}
+
+module.exports = { sendPodiums , sendPodiumSplitRound};
