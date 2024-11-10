@@ -5,7 +5,6 @@ const { getCountdownedCardFromDB } = require('../service/get_countdowned_card');
 
 let countdownIntervals = {}; 
 
-
 const startCardCountdown = async (req, res) => {
     try { 
         const cardId = req.body.cardId;
@@ -67,8 +66,8 @@ const CardDismissedHandler = async (req, res) => {
         const roundId = req.body.roundId;
         
         await makeCardDismissed(cardId, roundId);
+        stopCardCountdown(cardId); 
 
-        stopCardCountdown(cardId); // Stop countdown if dismissed manually
         emit({
             event: 'cd/dismiss',
             payload: null

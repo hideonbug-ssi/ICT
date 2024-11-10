@@ -45,16 +45,17 @@ const getCardFromDB = async () => {
     }
 };
 
-const openCardFromDB = async (cardId, topicId) => {
+
+const openCardFromDB = async (cardId) => {
     try {
         const client = await dbPool.connect(); 
-        const query = 'SELECT * FROM card WHERE card_id = $1 AND topic_id = $2'; 
-        const values = [cardId, topicId];
-        console.log('Topic ID:', topicId);
-        const { rows } = await client.query(query, values);  
-        console.log('Query result:', rows);
+        const query = 'SELECT * FROM card WHERE card_id = $1'; 
+        // console.log('Topic ID:', topicId);
+        const rows  = await client.query(query, [cardId]);  
+        console.log('Query result:', rows.rows);
         client.release(); 
-        return rows;  
+        return rows.rows;  
+
     } catch (err) {
         console.error('Error fetching card data:', err);
         throw err; 
@@ -62,4 +63,3 @@ const openCardFromDB = async (cardId, topicId) => {
 };
 
 module.exports = { getCardFromDB , openCardFromDB};
-

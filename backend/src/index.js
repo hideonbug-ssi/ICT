@@ -1,5 +1,3 @@
-// index.js
-
 const express = require('express'); // Import the Express module
 const { app, wss, register, server } = require('../common/express.js'); // Assuming express.js exports your Express app and WebSocket server
 const { connectDB } = require('../common/postgres.js'); // Import the connect function to connect to PostgreSQL
@@ -12,7 +10,7 @@ const { ShowLeaderboardHandler } = require('../endpoint/switch_leaderboard.js');
 const { PreviewTeamsHandler } = require('../endpoint/preview_teams.js');
 const {CardDismissedHandler} = require('../endpoint/dismiss_card.js');
 const {startCardCountdown} = require('../endpoint/dismiss_card.js');
-const { ShowPodiumHandler } = require('../endpoint/show_podium.js');
+const { ShowPodiumHandler, ShowPodiumSplitHandler } = require('../endpoint/show_podium.js');
 
 const serverPort = process.env.PORT || 3000; // Define the server port
 
@@ -29,8 +27,9 @@ app.patch('/dismissCard', CardDismissedHandler)
 app.get('/countdownCard', startCardCountdown)
 app.get('/showPodium', ShowPodiumHandler)
 app.get('/openCard', ShowCardHandler)
-
-
+app.get('/showPodiumSplit', ShowPodiumSplitHandler)
+ 
+ 
 // Start the server and database connection
 async function startServer() {
   await connectDB(); // Connect to PostgreSQL
